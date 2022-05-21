@@ -77,9 +77,9 @@ def pregunta_03():
 
     # Cree un stemeer que use el algoritmo de Porter.
     stemmer = PorterStemmer()
-    vectorr= CountVectorizer(analyzer="word",token_pattern=r"(?u)\b[a-zA-z][a-zA-z]+\b", lowercase=True)
+    #vectorr= CountVectorizer(analyzer="word",token_pattern=r"(?u)\b[a-zA-z][a-zA-z]+\b", lowercase=True)
     # Cree una instancia del analizador de palabras (build_analyzer)
-    analyzer = vectorr.build_analyzer()
+    analyzer = CountVectorizer().build_analyzer()
 
     # Retorne el analizador de palabras
     return lambda x: (stemmer.stem(w) for w in analyzer(x))
