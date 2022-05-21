@@ -8,8 +8,6 @@ o indterminados (=NULL). En este taller se construirÃ¡ un modelo de clasificaciÃ
 Naive Bayes para determinar el sentimiento de un comentario.
 
 """
-
-
 import numpy as np
 import pandas as pd
 
@@ -34,8 +32,8 @@ def pregunta_01():
     df_tagged = df[df["lbl"].notnull()]
     df_untagged = df[df["lbl"].isnull()]
 
-    x_tagged = df_tagged[df_tagged["msg"]];x_tagged
-    y_tagged = df_tagged[df_tagged["lbl"]];y_tagged
+    x_tagged = df_tagged["msg"]
+    y_tagged = df_tagged["lbl"]
 
     x_untagged = df_untagged["msg"]
     y_untagged = df_untagged["lbl"]
