@@ -114,15 +114,16 @@ def pregunta_04():
     countVectorizer = CountVectorizer(analyzer=analyzer,lowercase=True,stop_words="english",token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b",binary=False,max_df=1.0,min_df=5)
 
     # Cree un pipeline que contenga el CountVectorizer y el modelo de BernoulliNB.
+    Bernu=BernoulliNB()
     pipeline = Pipeline(steps=[("CV", countVectorizer),
-            ("BN", BernoulliNB()),
+            ("BN", Bernu),
         ],
     )
 
     # Defina un diccionario de parámetros para el GridSearchCV. Se deben
     # considerar 10 valores entre 0.1 y 1.0 para el parámetro alpha de
     # BernoulliNB.
-    param_grid = {"BN_alpha": np.linspace(0.1, 1.1, 10)}
+    param_grid = {"BN_alpha": np.linspace(0.1, 1.0, 10)}
 
     # Defina una instancia de GridSearchCV con el pipeline y el diccionario de
     # parámetros. Use cv = 5, y "accuracy" como métrica de evaluación
