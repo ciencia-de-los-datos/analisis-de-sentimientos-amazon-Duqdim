@@ -8,12 +8,7 @@ o indterminados (=NULL). En este taller se construir√° un modelo de clasificaci√
 Naive Bayes para determinar el sentimiento de un comentario.
 
 """
-from asyncio.windows_events import NULL
-from cmath import nan
-from curses.ascii import NUL
-from itertools import groupby
-from multiprocessing.sharedctypes import Value
-from xmlrpc.client import boolean
+
 
 import numpy as np
 import pandas as pd
