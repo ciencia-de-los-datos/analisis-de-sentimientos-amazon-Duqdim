@@ -8,83 +8,6 @@ o indterminados (=NULL). En este taller se construirá un modelo de clasificaci�
 Naive Bayes para determinar el sentimiento de un comentario.
 
 """
-import numpy as np
-import pandas as pd
-
-
-def pregunta_01():
-    """
-    Carga de datos.
-    -------------------------------------------------------------------------------------
-    """
-
-    # Lea el archivo `amazon_cells_labelled.tsv` y cree un DataFrame usando pandas.
-    # Etiquete la primera columna como `msg` y la segunda como `lbl`. Esta función
-    # retorna el dataframe con las dos columnas.
-    tabla = pd.read_csv("amazon_cells_labelled.tsv",
-        sep='\t',
-        header=None,
-        names=['msg','lbl'],
-    )
-    df=pd.DataFrame(tabla)
-
-    # Separe los grupos de mensajes etiquetados y no etiquetados.
-    df_tagged = df[df["lbl"].notnull()]
-    df_untagged = df[df["lbl"].isnull()]
-
-    x_tagged = df_tagged["msg"]
-    y_tagged = df_tagged["lbl"]
-
-    x_untagged = df_untagged["msg"]
-    y_untagged = df_untagged["lbl"]
-
-    # Retorne los grupos de mensajes
-    return (x_tagged, y_tagged, x_untagged, y_untagged)
-
-
-def pregunta_02():
-    """
-    Preparación de los conjuntos de datos.
-    -------------------------------------------------------------------------------------
-    """
-
-    # Importe train_test_split
-    import numpy as np
-    from sklearn.model_selection import train_test_split
-
-
-    # Cargue los datos generados en la pregunta 01.
-    x_tagged, y_tagged, x_untagged, y_untagged = pregunta_01()
-
-    # Divida los datos de entrenamiento y prueba. La semilla del generador de números
-    # aleatorios es 12345. Use el 10% de patrones para la muestra de prueba.
-    x_train, x_test, y_train, y_test = train_test_split(x_tagged, y_tagged, test_size=0.1,random_state=12345)
-
-    # Retorne `X_train`, `X_test`, `y_train` y `y_test`
-    return x_train, x_test, y_train, y_test
-
-
-
-def pregunta_03():
-    """
-    Construcción de un analizador de palabras
-    -------------------------------------------------------------------------------------
-    """
-    # Importe el stemmer de Porter
-    # Importe CountVectorizer
-    from sklearn.feature_extraction.text import CountVectorizer
-    from nltk.stem.porter  import PorterStemmer
-
-    # Cree un stemeer que use el algoritmo de Porter.
-    stemmer = PorterStemmer()
-    vectorr= CountVectorizer(analyzer="word",token_pattern=r"(?u)\b[a-zA-z][a-zA-z]+\b", lowercase=True)
-    # Cree una instancia del analizador de palabras (build_analyzer)
-    analyzer = vectorr.build_analyzer()
-
-    # Retorne el analizador de palabras
-    return lambda x: (stemmer.stem(w) for w in analyzer(x))
-
-
 def pregunta_04():
     """
     Especificación del pipeline y entrenamiento
@@ -101,7 +24,7 @@ def pregunta_04():
     from sklearn.naive_bayes import BernoulliNB
 
     # Cargue las variables.
-    x_train, y_train= pregunta_02()
+    x_train, x_test, y_train, y_test= pregunta_02()
 
     # Obtenga el analizador de la pregunta 3.
     analyzer = pregunta_03()
@@ -111,26 +34,26 @@ def pregunta_04():
     # límite superior para la frecuencia de palabras es del 100% y un límite
     # inferior de 5 palabras. Solo deben analizarse palabras conformadas por
     # letras.
-    countVectorizer = countVectorizer(analyzer=analyzer,lowercase=True,stop_words="english",token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b",binary=False,max_df=1.0,min_df=5)
+    countVectorizer = CountVectorizer(analyzer=analyzer,lowercase=True,stop_words="english",token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b",binary=False,max_df=1.0,min_df=5)
 
     # Cree un pipeline que contenga el CountVectorizer y el modelo de BernoulliNB.
-    pipeline = pipeline(steps=[("countVectorizer", countVectorizer),
-            ("BernoulliNB", BernoulliNB()),
+    pipeline = Pipeline(steps=[("CV", countVectorizer),
+            ("BN", BernoulliNB()),
         ],
     )
 
     # Defina un diccionario de parámetros para el GridSearchCV. Se deben
     # considerar 10 valores entre 0.1 y 1.0 para el parámetro alpha de
     # BernoulliNB.
-    param_grid = {"BernoulliNB_alpha": np.linspace(0.1, 1.1, 10)}
+    param_grid = {"BN_alpha": np.linspace(0.1, 1.1, 10)}
 
     # Defina una instancia de GridSearchCV con el pipeline y el diccionario de
     # parámetros. Use cv = 5, y "accuracy" como métrica de evaluación
     gridSearchCV = GridSearchCV(estimator=pipeline,param_grid=param_grid,
-        cv=5,
+        cv= 5,
         scoring="accuracy",
         refit=True,
-        return_train_score=True,
+        return_train_score=False,
     )
 
     # Búsque la mejor combinación de regresores
