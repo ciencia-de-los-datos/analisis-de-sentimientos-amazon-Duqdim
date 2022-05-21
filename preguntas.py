@@ -52,6 +52,7 @@ def pregunta_02():
     import numpy as np
     from sklearn.model_selection import train_test_split
 
+
     # Cargue los datos generados en la pregunta 01.
     x_tagged, y_tagged, x_untagged, y_untagged = pregunta_01()
 
@@ -100,7 +101,7 @@ def pregunta_04():
     from sklearn.naive_bayes import BernoulliNB
 
     # Cargue las variables.
-    x_train, _, y_train, _ = pregunta_02()
+    x_train, y_train= pregunta_02()
 
     # Obtenga el analizador de la pregunta 3.
     analyzer = pregunta_03()
@@ -113,7 +114,7 @@ def pregunta_04():
     countVectorizer = countVectorizer(analyzer=analyzer(),lowercase=True,stop_words="english",token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b",binary=False,max_df=1.0,min_df=5)
 
     # Cree un pipeline que contenga el CountVectorizer y el modelo de BernoulliNB.
-    pipeline = pipeline(steps=[("countvectorizer", countVectorizer),
+    pipeline = pipeline(steps=[("countVectorizer", countVectorizer),
             ("BernoulliNB", BernoulliNB()),
         ],
     )
