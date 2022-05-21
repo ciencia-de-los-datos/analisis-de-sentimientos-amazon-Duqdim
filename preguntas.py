@@ -111,7 +111,7 @@ def pregunta_04():
     # límite superior para la frecuencia de palabras es del 100% y un límite
     # inferior de 5 palabras. Solo deben analizarse palabras conformadas por
     # letras.
-    countVectorizer = countVectorizer(analyzer=analyzer(),lowercase=True,stop_words="english",token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b",binary=False,max_df=1.0,min_df=5)
+    countVectorizer = countVectorizer(analyzer=analyzer,lowercase=True,stop_words="english",token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b",binary=False,max_df=1.0,min_df=5)
 
     # Cree un pipeline que contenga el CountVectorizer y el modelo de BernoulliNB.
     pipeline = pipeline(steps=[("countVectorizer", countVectorizer),
@@ -122,7 +122,7 @@ def pregunta_04():
     # Defina un diccionario de parámetros para el GridSearchCV. Se deben
     # considerar 10 valores entre 0.1 y 1.0 para el parámetro alpha de
     # BernoulliNB.
-    param_grid = {"BernoulliNB_alpha": np.arange(0.1, 1.1, 10)}
+    param_grid = {"BernoulliNB_alpha": np.linspace(0.1, 1.1, 10)}
 
     # Defina una instancia de GridSearchCV con el pipeline y el diccionario de
     # parámetros. Use cv = 5, y "accuracy" como métrica de evaluación
