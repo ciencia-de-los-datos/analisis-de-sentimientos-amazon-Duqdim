@@ -31,11 +31,11 @@ def pregunta_01():
     df=pd.DataFrame(tabla)
 
     # Separe los grupos de mensajes etiquetados y no etiquetados.
-    df_tagged = df[(df["lbl"]>=0)]
+    df_tagged = df[df["lbl"].notnull()]
     df_untagged = df[df["lbl"].isnull()]
 
-    x_tagged = df_tagged[df_tagged["msg"] ==0.0];x_tagged
-    y_tagged = df_tagged[df_tagged["lbl"] ==1.0];y_tagged
+    x_tagged = df_tagged[df_tagged["msg"]];x_tagged
+    y_tagged = df_tagged[df_tagged["lbl"]];y_tagged
 
     x_untagged = df_untagged["msg"]
     y_untagged = df_untagged["lbl"]
